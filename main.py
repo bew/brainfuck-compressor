@@ -31,6 +31,21 @@ def convert_bf_normal_to_short(bf_normal: str) -> str:
     return bf_short
 
 
+def convert_bf_short_to_normal(bf_short: str) -> str:
+    io = PeekableStringIO(bf_short)
+    bf_normal = ""
+    while io.peek(1):
+        short_operation = io.read(1)
+        if short_operation in BF_SHORT_TO_NORMAL:
+            normal_operation = BF_SHORT_TO_NORMAL[short_operation]
+            count = int(io.read(1))
+        else:
+            normal_operation = short_operation
+            count = 1
+        bf_normal += normal_operation * count
+    return bf_normal
+
+
 if __name__ == "__main__":
     bf_code = input().strip()
     if not bf_code:
