@@ -1,5 +1,6 @@
+import io
 import sys
-from typing import Optional
+from typing import Callable
 
 BF_TO_BF_SHORT = {
     "+": "i",
@@ -13,36 +14,39 @@ BF_SHORT_TO_BF = dict(zip(
 ))
 
 
-class BrainfuckNormal2Short:
-    def __init__(self):
-        self.last_op: Optional[str] = None
-        self.last_op_count = 0
+def io_peek_next_char(io: io.BufferedReader) -> str:
+    buf = io.peek(1)
+    if not buf:
+        return ""
+    return chr(buf[0])
 
-    def convert(self, bf_code: str) -> str:
-        bf_short_code = ""
 
-        for op in bf_code:
-            if not self.last_op:
-                self._register_new_op(op)
+def io_read_str_while(
+    io: io.BufferedReader,
+    func: Callable[[str], bool]
+) -> str:
+    buf = ""
+    while func(io_peek_next_char(io)):
+        buf += io.read(1).decode("utf-8")
+    return buf
 
-            if self.last_op != op:
-                bf_short_code += self._convert_to_bf_short()
-                self._register_new_op(op)
 
-            self.last_op_count += 1
-
-        bf_short_code += self._convert_to_bf_short()
-        return bf_short_code
-
-    def _register_new_op(self, new_op: str):
-        self.last_op = new_op
-        self.last_op_count = 0
-
-    def _convert_to_bf_short(self) -> str:
+def convert_bf_normal_to_short(bf_normal: str) -> str:
+    bf_normal_bytes = bytes(bf_normal, encoding="utf-8")
+    io_stream = io.BufferedReader(io.BytesIO(bf_normal_bytes))  # type: ignore
+    bf_short = ""
+    while io_peek_next_char(io_stream):
+        operation = io_peek_next_char(io_stream)
+        group_of_same_operation = io_read_str_while(
+            io_stream,
+            lambda char: char == operation
+        )
+        duplicate_count = len(group_of_same_operation)
         try:
-            return BF_TO_BF_SHORT[self.last_op] + str(self.last_op_count)
+            bf_short += BF_TO_BF_SHORT[operation] + str(duplicate_count)
         except KeyError:
-            return self.last_op * self.last_op_count
+            bf_short += operation * duplicate_count
+    return bf_short
 
 
 bf_code = input().strip()
@@ -50,6 +54,6 @@ if not bf_code:
     print("Input is empty!", file=sys.stderr)
     sys.exit(1)
 
-bf_short_code = BrainfuckNormal2Short().convert(bf_code)
+bf_short_code = convert_bf_normal_to_short(bf_code)
 
 print(bf_short_code)
