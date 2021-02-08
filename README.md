@@ -22,7 +22,7 @@ Examples of compressed brainfuck conversion:
 
 For this project, there is a slight modification to increase compression:
 
-If an operation (one of `+-><`) is done only once in a row, do not indicate the repetition: `rili3` <=> `>+<+++`
+If an operation is is not repeated, do not indicate the repetition count: `rili3` <=> `>+<+++`
 
 
 ## Note on the implementation
