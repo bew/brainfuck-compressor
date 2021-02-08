@@ -20,6 +20,10 @@ Examples of compressed brainfuck conversion:
 - `r5` <=> `>>>>>` (right 5 times)
 - `l4` <=> `<<<<` (left 4 times)
 
+For this project, there is a slight modification to increase compression:
+
+If an operation (one of `+-><`) is done only once in a row, do not indicate the repetition: `rili3` <=> `>+<+++`
+
 
 ## Note on the implementation
 

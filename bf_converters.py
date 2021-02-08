@@ -27,7 +27,10 @@ def convert_to_compressed_form(bf_normal: str) -> str:
         )
         try:
             short_operation = BF_NORMAL_TO_COMPRESSED[normal_operation]
-            bf_compressed.write(short_operation + str(duplicate_count))
+            if duplicate_count > 1:
+                bf_compressed.write(short_operation + str(duplicate_count))
+            else:
+                bf_compressed.write(short_operation)
         except KeyError:
             bf_compressed.write(normal_operation * duplicate_count)
     return bf_compressed.getvalue()
@@ -39,7 +42,7 @@ def convert_to_normal_form(bf_compressed: str) -> str:
     while short_operation := io.read(1):
         if short_operation in BF_COMPRESSED_TO_NORMAL:
             normal_operation = BF_COMPRESSED_TO_NORMAL[short_operation]
-            count = int(io.read_while(lambda c: c.isdigit()) or "0")
+            count = int(io.read_while(lambda c: c.isdigit()) or "1")
         else:
             normal_operation = short_operation
             count = 1
