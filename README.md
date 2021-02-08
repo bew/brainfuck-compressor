@@ -1,6 +1,6 @@
 # Brainfuck compressor
 
-This is a brainfuck converter between the normal form and the compressed form.
+This is a brainfuck converter between the usual normam form and a compressed form.
 
 The compressed form of brainfuck is another name for the 'shortcut brainfuck' from https://www.dcode.fr/brainfuck-language#q2 :
 
