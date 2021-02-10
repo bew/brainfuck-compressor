@@ -22,7 +22,8 @@ Examples of compressed brainfuck conversion:
 
 For this project, there is a slight modification to increase compression:
 
-If an operation is is not repeated, do not indicate the repetition count: `rili3` <=> `>+<+++`
+If an operation is is not repeated, do not indicate the repetition count:
+So for `>+<+++`, instead of `r1i1l1i3` we do: `rili3`.
 
 
 ## Note on the implementation
